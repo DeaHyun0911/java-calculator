@@ -1,18 +1,37 @@
 package classCalculator;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
 public class Calculator {
 
-    int num1;
-    int num2;
-    char plus = '+';
-    char minus = '-';
-    char multi = '*';
-    char div = '/';
+    // 결과 저장 콜렉션
+    private Stack<Integer> resultList = new Stack<Integer>();
 
-    Queue<Integer> resultList = new LinkedList<Integer>();
+    // 연산 메서드
+    public Stack<Integer> calculate(int num1, int num2, char operator) {
+        switch (operator) {
+            case '+':
+                resultList.add(num1 + num2);
+                break;
+            case '-':
+                resultList.add(num1 - num2);
+                break;
+            case '*':
+                resultList.add(num1 * num2);
+                break;
+            case '/':
+                resultList.add(num1 / num2);
+                break;
+        }
+        return resultList;
+    }
+
+    // 결과 출력 메서드
+    public void getResult() {
+        System.out.println(resultList.peek());
+    }
+
+
 
 
 }
