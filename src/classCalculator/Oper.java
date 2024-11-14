@@ -24,3 +24,10 @@ enum Menu {
     REMOVE,
     EXIT;
 }
+
+enum Step {
+    ONE,
+    TWO,
+    THREE,
+    FOUR;
+}

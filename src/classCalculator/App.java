@@ -5,6 +5,8 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class App {
+    public static Step step = Step.ONE;
+
     public static void main(String[] args) {
         boolean isRun = true; // 실행여부
         long runCount = 0;
@@ -15,15 +17,14 @@ public class App {
         // 전체 계산기 반복
         while(isRun && runCount < 10000) {
             // 첫번째 계산
-            if(calculator.getListEmpty()) {
-
-                NumberInput(input,"첫번째 숫자 입력: ", calculator::setFirstNum);
-                NumberInput(input,"두번째 숫자 입력: ", calculator::setSecondNum);
+            if(step == Step.ONE) {
+                NumberInput(input,"첫번째 숫자 입력: ", calculator::setFirstNum, Step.TWO);
+            } else if (step == Step.TWO) {
+                NumberInput(input,"두번째 숫자 입력: ", calculator::setSecondNum, Step.THREE);
+            } else if (step == Step.THREE) {
                 operationInput(input, calculator);
                 calculator.firstNumberRemove();
-
-            } else {
-
+            } else if (step == Step.FOUR ){
                 // 메뉴 보여주기
                 System.out.println("--------------------------------------------");
                 System.out.println("메뉴를 선택하세요(번호 입력)");
@@ -48,12 +49,15 @@ public class App {
 
                 switch (selectMenu) {
                     case Menu.CONTINUE:
-                        NumberInput(input,"두번째 숫자 입력: ", calculator::setSecondNum);
+                        App.step = Step.TWO;
+                        System.out.println("햔재 값 : " +calculator.getCurrentNumber());
+                        NumberInput(input,"두번째 숫자 입력: ", calculator::setSecondNum, Step.THREE);
                         operationInput(input, calculator);
                         break;
                     case Menu.RESET:
                         calculator.setResetList();
                         System.out.println("리셋되었습니다.");
+                        App.step = Step.ONE;
                         break;
                     case Menu.LIST:
                         String list = calculator.getList();
@@ -61,7 +65,10 @@ public class App {
                         break;
                     case Menu.REMOVE:
                         calculator.firstNumberRemove();
-                        System.out.println("기록이 없습니다. 처음부터 계산합니다.");
+                        if(calculator.getListEmpty()) {
+                            App.step = Step.ONE;
+                            System.out.println("저장된 기록이 없어 다시 시작됩니다.");
+                        }
                         break;
                     case Menu.EXIT:
                         System.out.println("계산기를 종료합니다.");
@@ -79,18 +86,18 @@ public class App {
 
 
     // 함수형 인터페이스를 활용한 메서드 병합
-    public static void NumberInput(Scanner input, String text, Interface numMethod) {
+    public static void NumberInput(Scanner input, String text, Interface numMethod,Step step) {
         try {
             System.out.print(text);
             String numInput = input.next();
             if (!Pattern.matches(NUMBER_REG, numInput)) {
                 throw new InputMismatchException("숫자가 아니예요.");
             }
-            Double num = Double.parseDouble(numInput);
+            double num = Double.parseDouble(numInput);
             numMethod.setInput(num);
+            App.step = step;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            NumberInput(input, text, numMethod);
         }
     }
 
@@ -109,9 +116,9 @@ public class App {
             calculator.calculate(oper);
             System.out.println("--------------------------------------------");
             System.out.println("결과 : " +calculator.getCurrentNumber());
+            App.step = Step.FOUR;
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            operationInput(input, calculator);
         }
     }
 
@@ -130,10 +137,6 @@ public class App {
             default:
                 throw new InputMismatchException("잘못된 연산 기호입니다");
         }
-    }
-
-    interface Interface {
-        void setInput(Double number);
     }
 
 

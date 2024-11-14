@@ -12,6 +12,8 @@ public class Calculator<T extends Number> {
     // 결과 저장 콜렉션
     private Stack<T> resultStack = new Stack<T>();
 
+    private Step step = Step.ONE;
+
     // 연산 메서드
     public Stack<T> calculate(Oper operator) {
 
