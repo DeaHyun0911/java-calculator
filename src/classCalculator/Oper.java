@@ -16,3 +16,10 @@ enum Oper {
         return oper;
     }
 }
+
+enum Menu {
+    CONTINUE,
+    RESET,
+    LIST,
+    EXIT;
+}

@@ -79,4 +79,8 @@ public class Calculator<T extends Number> {
     public void firstNumberRemove() {
         resultStack.remove(0);
     }
+
+    interface NumberType<T> {
+        Double test(T t);
+    }
 }
