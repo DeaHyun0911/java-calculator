@@ -2,37 +2,34 @@ package classCalculator;
 
 import java.util.Stack;
 
-public class Calculator {
+public class Calculator<T extends Number> {
 
     // 결과 저장 콜렉션
-    private Stack<Integer> resultStack = new Stack<Integer>();
+    private Stack<T> resultStack = new Stack<T>();
 
     // 연산 메서드
-    public Stack<Integer> calculate(int num1, int num2, char operator) {
+    public Stack<T> calculate(T num1, T num2, Oper operator) {
+        T result = null;
         switch (operator) {
-            case '+':
-                resultStack.add(num1 + num2);
+            case ADD:
+                result = (T) Double.valueOf(num1.doubleValue() + num2.doubleValue());
                 break;
-            case '-':
-                resultStack.add(num1 - num2);
+            case SUBTRACT:
+                result = (T) Double.valueOf(num1.doubleValue() - num2.doubleValue());
                 break;
-            case '*':
-                resultStack.add(num1 * num2);
+            case MULTI:
+                result = (T) Double.valueOf(num1.doubleValue() * num2.doubleValue());
                 break;
-            case '/':
-                resultStack.add(num1 / num2);
+            case DIVIDE:
+                result = (T) Double.valueOf(num1.doubleValue() / num2.doubleValue());
                 break;
         }
+        resultStack.add(result);
         return resultStack;
     }
 
-    // 결과 출력 메서드
-    public void getResult() {
-        System.out.println(resultStack.peek());
-    }
-
     // 최근 값 내보내기
-    public int getCurrentNumber() {
+    public T getCurrentNumber() {
         return resultStack.peek();
     }
 

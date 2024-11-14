@@ -1,26 +1,29 @@
 package classCalculator;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        Calculator calculator = new Calculator();
-        char operator;
+        Calculator<Double> calculator = new Calculator();
+
 
         while(true) {
 
                 // 첫번째 계산
                 if(calculator.getListEmpty()) {
                     System.out.print("첫번째 숫자 입력: ");
-                    int num1 = input.nextInt();
+                    Double num1 = input.nextDouble();
                     System.out.print("두번째 숫자 입력: ");
-                    int num2 = input.nextInt();
+                    Double num2 = input.nextDouble();
                     System.out.print("연산기호: ");
-                    operator = input.next().charAt(0);
+                    char operator = input.next().charAt(0);
 
-                    calculator.calculate(num1, num2, operator);
-                    calculator.getResult();
+                    Oper oper = charToOper(operator);
+
+                    calculator.calculate(num1, num2, oper);
+                    System.out.println("결과 :" +calculator.getCurrentNumber());
                 } else {
 
                 // 재시작 체크
@@ -31,13 +34,15 @@ public class App {
 
                 if (menu == 1) {
                     System.out.print("숫자 입력: ");
-                    int num = input.nextInt();
+                    Double num = input.nextDouble();
 
                     System.out.print("연산기호: ");
-                    operator = input.next().charAt(0);
+                    char operator = input.next().charAt(0);
 
-                    calculator.calculate(calculator.getCurrentNumber(), num, operator);
-                    calculator.getResult();
+                    Oper oper = charToOper(operator);
+
+                    calculator.calculate(calculator.getCurrentNumber(), num, oper);
+                    System.out.println("결과 :" +calculator.getCurrentNumber());
                 } else if (menu == 2) {
                     calculator.setResetList();
                 } else if (menu == 3) {
@@ -48,8 +53,22 @@ public class App {
                 }
             }
 
+        }
 
+    }
 
+    public static Oper charToOper(char operator) {
+        switch (operator) {
+            case '+':
+                return Oper.ADD;
+            case '-':
+                return Oper.SUBTRACT;
+            case '*':
+                return Oper.MULTI;
+            case '/':
+                return Oper.DIVIDE;
+            default:
+                throw new InputMismatchException("잘못된 연산 기호입니다");
         }
     }
 }
