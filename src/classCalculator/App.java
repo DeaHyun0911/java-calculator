@@ -17,9 +17,6 @@ public class App {
             // 첫번째 계산
             if(calculator.getListEmpty()) {
 
-//                firstInput(input, calculator);
-//                secondInput(input, calculator);
-
                 NumberInput(input,"첫번째 숫자 입력: ", calculator::setFirstNum);
                 NumberInput(input,"두번째 숫자 입력: ", calculator::setSecondNum);
                 operationInput(input, calculator);
@@ -28,10 +25,10 @@ public class App {
             } else {
 
                 // 메뉴 보여주기
-                System.out.println("[ 메뉴를 선택하세요 (번호 입력) ]");
-                System.out.println("1. 계속 계산 2. 리셋하기 3. 리스트 조회 4. 종료하기");
-
-
+                System.out.println("--------------------------------------------");
+                System.out.println("메뉴를 선택하세요(번호 입력)");
+                System.out.println("1. 계속 계산 2. 리셋하기 3. 리스트 조회 4.첫번째 기록 제거 5. 종료하기");
+                System.out.println("--------------------------------------------");
 
                 System.out.print("메뉴 선택: ");
                 String menu = input.next();
@@ -42,9 +39,10 @@ public class App {
                     case "1": selectMenu = Menu.CONTINUE; break;
                     case "2": selectMenu = Menu.RESET; break;
                     case "3": selectMenu = Menu.LIST; break;
-                    case "4": selectMenu = Menu.EXIT; break;
+                    case "4": selectMenu = Menu.REMOVE; break;
+                    case "5": selectMenu = Menu.EXIT; break;
                     default:
-                    System.out.println("다시 선택하세요.");
+                    System.out.println("숫자 1~5 중에 입력하세요.");
                     continue;
                 }
 
@@ -55,14 +53,19 @@ public class App {
                         break;
                     case Menu.RESET:
                         calculator.setResetList();
+                        System.out.println("리셋되었습니다.");
                         break;
                     case Menu.LIST:
                         String list = calculator.getList();
-                        System.out.println(list);
+                        System.out.println("저장된 기록: " + list);
+                        break;
+                    case Menu.REMOVE:
+                        calculator.firstNumberRemove();
+                        System.out.println("기록이 없습니다. 처음부터 계산합니다.");
                         break;
                     case Menu.EXIT:
+                        System.out.println("계산기를 종료합니다.");
                         isRun = false;
-                        break;
                 }
             }
             runCount++;
@@ -78,7 +81,7 @@ public class App {
     // 함수형 인터페이스를 활용한 메서드 병합
     public static void NumberInput(Scanner input, String text, Interface numMethod) {
         try {
-            System.out.print("첫번째 숫자 입력: ");
+            System.out.print(text);
             String numInput = input.next();
             if (!Pattern.matches(NUMBER_REG, numInput)) {
                 throw new InputMismatchException("숫자가 아니예요.");
@@ -90,38 +93,6 @@ public class App {
             NumberInput(input, text, numMethod);
         }
     }
-
-//    // 첫번째 숫자 입력
-//    public static void firstInput(Scanner input, Calculator<Double> calculator) {
-//        try {
-//            System.out.print("첫번째 숫자 입력: ");
-//            String numInput = input.next();
-//            if (!Pattern.matches(NUMBER_REG, numInput)) {
-//                throw new InputMismatchException("숫자가 아니예요.");
-//            }
-//            Double num = Double.parseDouble(numInput);
-//            calculator.setFirstNum(num);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            firstInput(input, calculator);
-//        }
-//    }
-//
-//    // 두번째 숫자 입력
-//    public static void secondInput(Scanner input, Calculator<Double> calculator) {
-//        try {
-//            System.out.print("두번째 숫자 입력: ");
-//            String numInput = input.next();
-//            if (!Pattern.matches(NUMBER_REG, numInput)) {
-//                throw new InputMismatchException("숫자가 아니예요.");
-//            }
-//            Double num = Double.parseDouble(numInput);
-//            calculator.setSecondNum(num);
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//            secondInput(input, calculator);
-//        }
-//    }
 
     // 연산 기호 입력 및 결과 출력
     public static void operationInput(Scanner input, Calculator<Double> calculator) {
@@ -136,7 +107,8 @@ public class App {
             Oper oper = charToOper(operator);
 
             calculator.calculate(oper);
-            System.out.println("결과 :" +calculator.getCurrentNumber());
+            System.out.println("--------------------------------------------");
+            System.out.println("결과 : " +calculator.getCurrentNumber());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             operationInput(input, calculator);

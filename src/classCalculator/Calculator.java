@@ -62,7 +62,6 @@ public class Calculator<T extends Number> {
     // 리스트 리셋
     public void setResetList() {
         resultStack.clear();
-        System.out.println("리셋되었습니다.");
     }
 
     // 리스트가 비었는지 확인
