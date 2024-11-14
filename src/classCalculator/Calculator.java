@@ -62,7 +62,6 @@ public class Calculator<T extends Number> {
     // 리스트 리셋
     public void setResetList() {
         resultStack.clear();
-        System.out.println("리셋되었습니다.");
     }
 
     // 리스트가 비었는지 확인
@@ -78,5 +77,9 @@ public class Calculator<T extends Number> {
     // 첫번재 숫자 제거
     public void firstNumberRemove() {
         resultStack.remove(0);
+    }
+
+    interface NumberType<T> {
+        Double test(T t);
     }
 }
